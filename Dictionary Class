@@ -1,0 +1,69 @@
+package lab2;
+
+import java.util.ArrayList; 
+
+public class Dictionary {
+	private ArrayList<Word> theList; 
+	private ArrayList<Word> backup =  null; 
+	
+	public Dictionary() {
+		theList = new ArrayList<Word>(); 
+	}
+	
+	public String addString(String arg) {
+		int size = theList.size(); 
+		for (int i = 0; i < size; ++i) {
+			String s = theList.get(i).getWord(); 
+			int count = theList.get(i).getCount(); 
+			
+			if(s == arg) {
+				theList.set(i, new Word(s, count+1)); 
+				return theList.get(i).toString(); 
+			}
+		}
+		
+		theList.add(new Word(arg, 1)); 
+		return theList.get(size - 1).toString(); 
+	}
+	
+	public String sortList(int arg) {
+		if (backup == null) {
+			backup = new ArrayList<Word>(theList); 
+		}
+		
+		if (arg == Word.ORIGINAL) {
+			theList = backup; 
+			Word.setCriterion(Word.ORIGINAL);
+			return "Word List was rest"; 
+		}
+		else if(arg == Word.BYNAME || arg == Word.BYCOUNTS) {
+			Word.setCriterion(arg); 
+			
+			for (int i = 0; i < theList.size() - 1; ++i) {
+				for(int j = i + 1; j <theList.size(); ++j) {
+					Word word = theList.get(j); 
+					Word nextWord = theList.get(i); 
+					int compareValue = word.compareTo(nextWord); 
+					
+					if (compareValue == -1) {
+						theList.set(j, nextWord); 
+						theList.set(i, word); 
+					}
+					
+				} //end of nested loop
+			}// end of loop
+			
+			if (arg == Word.BYCOUNTS) {
+				return "Sorted by count"; 
+			}
+			else if (arg == Word.BYNAME) {
+				return "Sorted alphabetically"; 
+			}
+		}
+		return "Sort criterion not known"; 
+	}
+	
+	public String toString() {
+		
+	}
+}
